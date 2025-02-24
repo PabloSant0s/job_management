@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
 import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
+import br.com.rocketseat.job_management.modules.candidate.exceptions.UserFoundException;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ public class CandidateController {
   private CandidateRepository candidateRepository;
   @PostMapping
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate) {
-      candidate = candidateRepository.save(candidate);
+      this.candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(user->{
+        throw new UserFoundException();
+      });
       
       return ResponseEntity.status(HttpStatus.CREATED).body(candidate);
   }
