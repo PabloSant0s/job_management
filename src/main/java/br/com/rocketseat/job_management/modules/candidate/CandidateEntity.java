@@ -3,6 +3,7 @@ package br.com.rocketseat.job_management.modules.candidate;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Column;
@@ -33,5 +34,6 @@ public class CandidateEntity {
   private String curriculum;
 
   @Column(name = "created_at")
+  @CreationTimestamp
   private Instant createdAt;
 }
