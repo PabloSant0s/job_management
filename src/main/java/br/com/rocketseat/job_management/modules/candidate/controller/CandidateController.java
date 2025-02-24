@@ -1,18 +1,17 @@
 package br.com.rocketseat.job_management.modules.candidate.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
-import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
-import br.com.rocketseat.job_management.modules.candidate.exceptions.UserFoundException;
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
+import br.com.rocketseat.job_management.modules.candidate.exceptions.UserFoundException;
+import br.com.rocketseat.job_management.modules.candidate.useCase.CreateCandidateUseCase;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -20,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class CandidateController {
   
   @Autowired
-  private CandidateRepository candidateRepository;
+  private CreateCandidateUseCase createCandidateUseCase;;
   @PostMapping
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate) {
-      this.candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(user->{
-        throw new UserFoundException();
-      });
-      
-      return ResponseEntity.status(HttpStatus.CREATED).body(candidate);
+      try {
+        return new ResponseEntity<>(this.createCandidateUseCase.execute(candidate),HttpStatus.CREATED);
+      } catch (UserFoundException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+      }
   }
   
 }
