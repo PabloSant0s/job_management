@@ -15,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
-@Entity(name="tb_job")
+@Entity(name = "tb_job")
 public class JobEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,7 +25,7 @@ public class JobEntity {
   private String description;
 
   @ManyToOne()
-  @JoinColumn(name = "company_id", insertable=false, updatable=false)
+  @JoinColumn(name = "company_id", insertable = false, updatable = false)
   private CompanyEntity company;
 
   @Column(name = "company_id")
