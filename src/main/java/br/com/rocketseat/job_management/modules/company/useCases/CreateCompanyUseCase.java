@@ -3,7 +3,7 @@ package br.com.rocketseat.job_management.modules.company.useCases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.rocketseat.job_management.modules.candidate.exceptions.UserFoundException;
+import br.com.rocketseat.job_management.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.company.entities.CompanyEntity;
 import br.com.rocketseat.job_management.modules.company.repositories.CompanyRepository;
 

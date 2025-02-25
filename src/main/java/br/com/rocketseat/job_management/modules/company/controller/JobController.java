@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rocketseat.job_management.exceptions.CompanyNotFoundException;
 import br.com.rocketseat.job_management.modules.company.entities.JobEntity;
-import br.com.rocketseat.job_management.modules.company.exceptions.CompanyNotFoundException;
 import br.com.rocketseat.job_management.modules.company.useCases.CreateJobUseCase;
 import jakarta.validation.Valid;
 

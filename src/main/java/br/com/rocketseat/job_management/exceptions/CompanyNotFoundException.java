@@ -1,4 +1,4 @@
-package br.com.rocketseat.job_management.modules.company.exceptions;
+package br.com.rocketseat.job_management.exceptions;
 
 public class CompanyNotFoundException extends RuntimeException {
   public CompanyNotFoundException(){

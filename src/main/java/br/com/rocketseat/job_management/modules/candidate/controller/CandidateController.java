@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rocketseat.job_management.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
-import br.com.rocketseat.job_management.modules.candidate.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.candidate.useCase.CreateCandidateUseCase;
 import jakarta.validation.Valid;
 
