@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -20,6 +22,8 @@ public class JobEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
+
+  @NotBlank(message = "level é obrigatório")
   private String level;
   private String benefits;
   private String description;
@@ -28,6 +32,7 @@ public class JobEntity {
   @JoinColumn(name = "company_id", insertable = false, updatable = false)
   private CompanyEntity company;
 
+  @NotNull(message = "Campo obrigatório")
   @Column(name = "company_id")
   private UUID companyId;
 
