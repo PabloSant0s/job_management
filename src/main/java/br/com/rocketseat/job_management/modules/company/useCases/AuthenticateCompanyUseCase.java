@@ -1,26 +1,20 @@
 package br.com.rocketseat.job_management.modules.company.useCases;
 
-import java.time.Duration;
-import java.time.Instant;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-
 import br.com.rocketseat.job_management.modules.company.dto.AuthCompanyDTO;
 import br.com.rocketseat.job_management.modules.company.entities.CompanyEntity;
 import br.com.rocketseat.job_management.modules.company.repositories.CompanyRepository;
+import br.com.rocketseat.job_management.providers.JwtProvider;
 
 @Service
 public class AuthenticateCompanyUseCase {
 
-  @Value("${security.token.secret}")
-  private String secretKey;
+  @Autowired
+  private JwtProvider jwtProvider;
 
   @Autowired
   private CompanyRepository companyRepository;
@@ -37,12 +31,7 @@ public class AuthenticateCompanyUseCase {
     if (!passwordMatches) {
       throw new UsernameNotFoundException("Username/password incorrect");
     }
-
-    Algorithm algorithm = Algorithm.HMAC256(secretKey);
-    String token = JWT.create()
-      .withIssuer("javagas")
-      .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
-      .withSubject(company.getId().toString()).sign(algorithm);
+    String token = this.jwtProvider.generateToken(company.getId().toString());
 
     return token;
   }
