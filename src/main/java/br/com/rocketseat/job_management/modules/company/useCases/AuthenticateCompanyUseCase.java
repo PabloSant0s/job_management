@@ -1,5 +1,8 @@
 package br.com.rocketseat.job_management.modules.company.useCases;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,7 +39,10 @@ public class AuthenticateCompanyUseCase {
     }
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
-    String token = JWT.create().withIssuer("javagas").withSubject(company.getId().toString()).sign(algorithm);
+    String token = JWT.create()
+      .withIssuer("javagas")
+      .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+      .withSubject(company.getId().toString()).sign(algorithm);
 
     return token;
   }
