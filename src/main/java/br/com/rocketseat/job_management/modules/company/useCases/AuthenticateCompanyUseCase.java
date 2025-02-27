@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.rocketseat.job_management.dto.AuthResponseDTO;
 import br.com.rocketseat.job_management.modules.company.dto.AuthCompanyDTO;
 import br.com.rocketseat.job_management.modules.company.entities.CompanyEntity;
 import br.com.rocketseat.job_management.modules.company.repositories.CompanyRepository;
@@ -22,7 +23,7 @@ public class AuthenticateCompanyUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public String execute(AuthCompanyDTO authCompany) throws UsernameNotFoundException {
+  public AuthResponseDTO execute(AuthCompanyDTO authCompany) throws UsernameNotFoundException {
     CompanyEntity company = this.companyRepository.findByUsername(authCompany.getUsername())
         .orElseThrow(() -> new UsernameNotFoundException("Username/password incorrect"));
 
@@ -31,7 +32,7 @@ public class AuthenticateCompanyUseCase {
     if (!passwordMatches) {
       throw new UsernameNotFoundException("Username/password incorrect");
     }
-    String token = this.jwtProvider.generateToken(company.getId().toString(), false);
+    AuthResponseDTO token = this.jwtProvider.generateToken(company.getId().toString(), false);
 
     return token;
   }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.rocketseat.job_management.dto.AuthResponseDTO;
 import br.com.rocketseat.job_management.modules.company.dto.AuthCompanyDTO;
 import br.com.rocketseat.job_management.modules.company.useCases.AuthenticateCompanyUseCase;
 
@@ -22,7 +23,7 @@ public class AuthenticateCompanyController {
   @PostMapping("/company")
   public ResponseEntity<Object> authCompany(@RequestBody AuthCompanyDTO authCompanyDTO) {
     try {
-      String token = authenticateCompanyUseCase.execute(authCompanyDTO);
+      AuthResponseDTO token = authenticateCompanyUseCase.execute(authCompanyDTO);
       return ResponseEntity.ok(token);
     } catch (UsernameNotFoundException e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

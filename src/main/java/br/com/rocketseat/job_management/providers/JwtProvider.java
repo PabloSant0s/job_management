@@ -11,6 +11,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
+import br.com.rocketseat.job_management.dto.AuthResponseDTO;
+
 @Service
 public class JwtProvider {
   @Value("${security.token.secret}")
@@ -19,19 +21,20 @@ public class JwtProvider {
   @Value("${security.token.secret.candidate}")
   private String secretKeyCandidate;
 
-  public String generateToken(String sub, boolean isCandidate) {
+  public AuthResponseDTO generateToken(String sub, boolean isCandidate) {
     Algorithm algorithm = isCandidate ? Algorithm.HMAC256(secretKeyCandidate) : Algorithm.HMAC256(secretKey);
+    Instant expiresIn =  isCandidate ? Instant.now().plus(Duration.ofMinutes(10)) : Instant.now().plus(Duration.ofHours(2));
     String token = isCandidate ? JWT.create()
         .withIssuer("javagas")
-        .withExpiresAt(Instant.now().plus(Duration.ofMinutes(10)))
+        .withExpiresAt(expiresIn)
         .withClaim("roles", Arrays.asList("candidate"))
         .withSubject(sub).sign(algorithm)
         : JWT.create()
             .withIssuer("javagas")
-            .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+            .withExpiresAt(expiresIn)
             .withSubject(sub).sign(algorithm);
 
-    return token;
+    return AuthResponseDTO.builder().access_token(token).expires_in(expiresIn.toEpochMilli()).build();
   }
 
   public String validateToken(String token, boolean isCandidate) {

@@ -1,4 +1,4 @@
-package br.com.rocketseat.job_management.modules.candidate.dto;
+package br.com.rocketseat.job_management.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthCandidateResponseDTO {
-  private String access_token;  
+public class AuthResponseDTO {
+  private String access_token;
+  private Long expires_in;  
 }

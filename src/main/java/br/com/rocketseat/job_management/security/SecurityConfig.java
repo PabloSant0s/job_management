@@ -20,7 +20,7 @@ public class SecurityConfig {
     return http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> {
       auth.requestMatchers("/candidate").permitAll();
       auth.requestMatchers("/company").permitAll();
-      auth.requestMatchers("/auth/company").permitAll();
+      auth.requestMatchers("/auth/**").permitAll();
       auth.anyRequest().authenticated();
     })
         .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
