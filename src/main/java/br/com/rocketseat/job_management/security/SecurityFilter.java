@@ -30,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     String token = request.getHeader("Authorization");
     if (token != null) {
-      String subject = this.jwtProvider.validateToken(token);
+      String subject = this.jwtProvider.validateToken(token, false);
 
       if (subject == null) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalido");

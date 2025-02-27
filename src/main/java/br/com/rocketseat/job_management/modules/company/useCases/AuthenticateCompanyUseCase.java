@@ -31,7 +31,7 @@ public class AuthenticateCompanyUseCase {
     if (!passwordMatches) {
       throw new UsernameNotFoundException("Username/password incorrect");
     }
-    String token = this.jwtProvider.generateToken(company.getId().toString());
+    String token = this.jwtProvider.generateToken(company.getId().toString(), false);
 
     return token;
   }
