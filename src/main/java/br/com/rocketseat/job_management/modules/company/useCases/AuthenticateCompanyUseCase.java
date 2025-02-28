@@ -9,13 +9,13 @@ import br.com.rocketseat.job_management.dto.AuthResponseDTO;
 import br.com.rocketseat.job_management.modules.company.dto.AuthCompanyDTO;
 import br.com.rocketseat.job_management.modules.company.entities.CompanyEntity;
 import br.com.rocketseat.job_management.modules.company.repositories.CompanyRepository;
-import br.com.rocketseat.job_management.providers.JwtProvider;
+import br.com.rocketseat.job_management.providers.JwtCompanyProvider;
 
 @Service
 public class AuthenticateCompanyUseCase {
 
   @Autowired
-  private JwtProvider jwtProvider;
+  private JwtCompanyProvider jwtProvider;
 
   @Autowired
   private CompanyRepository companyRepository;
@@ -32,7 +32,7 @@ public class AuthenticateCompanyUseCase {
     if (!passwordMatches) {
       throw new UsernameNotFoundException("Username/password incorrect");
     }
-    AuthResponseDTO token = this.jwtProvider.generateToken(company.getId().toString(), false);
+    AuthResponseDTO token = this.jwtProvider.generateToken(company.getId().toString());
 
     return token;
   }

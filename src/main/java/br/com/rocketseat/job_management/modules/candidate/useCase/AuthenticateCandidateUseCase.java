@@ -9,7 +9,7 @@ import br.com.rocketseat.job_management.dto.AuthResponseDTO;
 import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
 import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
 import br.com.rocketseat.job_management.modules.candidate.dto.AuthCandidateDTO;
-import br.com.rocketseat.job_management.providers.JwtProvider;
+import br.com.rocketseat.job_management.providers.JwtCandidateProvider;
 
 @Service
 public class AuthenticateCandidateUseCase {
@@ -20,7 +20,7 @@ public class AuthenticateCandidateUseCase {
   private PasswordEncoder passwordEncoder;
 
   @Autowired
-  private JwtProvider jwtProvider;
+  private JwtCandidateProvider jwtProvider;
 
 
   public AuthResponseDTO execute(AuthCandidateDTO authCandidate) throws UsernameNotFoundException{
@@ -32,7 +32,7 @@ public class AuthenticateCandidateUseCase {
       throw new UsernameNotFoundException("Username/password incorrect");
     }
 
-    AuthResponseDTO token = jwtProvider.generateToken(candidate.getId().toString(), true);
+    AuthResponseDTO token = jwtProvider.generateToken(candidate.getId().toString());
     return token;
   }
 }
