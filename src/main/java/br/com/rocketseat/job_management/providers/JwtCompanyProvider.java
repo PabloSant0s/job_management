@@ -2,6 +2,7 @@ package br.com.rocketseat.job_management.providers;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ public class JwtCompanyProvider implements JwtProvider {
     String token = JWT.create()
         .withIssuer("javagas")
         .withExpiresAt(expiresIn)
+        .withClaim("roles", Arrays.asList("COMPANY"))
         .withSubject(sub).sign(algorithm);
 
     return AuthResponseDTO.builder().access_token(token).expires_in(expiresIn.toEpochMilli()).build();

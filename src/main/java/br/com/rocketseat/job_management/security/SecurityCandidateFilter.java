@@ -31,16 +31,17 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     String token = request.getHeader("Authorization");
-    if (token != null  && request.getRequestURI().startsWith("/candidate")) {
+    if (token != null && request.getRequestURI().startsWith("/candidate")) {
       token = token.replace("Bearer ", "");
       try {
         DecodedJWT payload = jwtProvider.validateToken(token)
             .orElseThrow(() -> new AuthenticationException("Invalid token"));
         request.setAttribute("candidate_id", payload.getSubject());
 
-        List<SimpleGrantedAuthority> grants = payload.getClaim("roles").asList(String.class).stream().map(role-> new SimpleGrantedAuthority("ROLE_" + role)).toList();
+        List<SimpleGrantedAuthority> grants = payload.getClaim("roles").asList(String.class).stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase())).toList();
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(payload.getSubject(), null,
-        grants);
+            grants);
         SecurityContextHolder.getContext().setAuthentication(auth);
       } catch (Exception e) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalido");
