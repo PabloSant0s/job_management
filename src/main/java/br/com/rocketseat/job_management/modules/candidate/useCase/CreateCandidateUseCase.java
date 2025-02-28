@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import br.com.rocketseat.job_management.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
 import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
+import br.com.rocketseat.job_management.modules.candidate.dto.ProfileCandidateDTO;
 
 @Service
 public class CreateCandidateUseCase {
@@ -15,13 +16,21 @@ public class CreateCandidateUseCase {
 
   @Autowired
   private PasswordEncoder passwordEncoder;
-  public CandidateEntity execute(CandidateEntity candidate) {
-    this.candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(user->{
+
+  public ProfileCandidateDTO execute(CandidateEntity candidate) {
+    this.candidateRepository.findByUsernameOrEmail(candidate.getUsername(), candidate.getEmail()).ifPresent(user -> {
       throw new UserFoundException();
     });
 
     candidate.setPassword(passwordEncoder.encode(candidate.getPassword()));
-    
-    return candidateRepository.save(candidate);
+
+    candidate = candidateRepository.save(candidate);
+    return ProfileCandidateDTO.builder()
+        .id(candidate.getId())
+        .name(candidate.getName())
+        .username(candidate.getUsername())
+        .email(candidate.getEmail())
+        .description(candidate.getDescription())
+        .build();
   }
 }
