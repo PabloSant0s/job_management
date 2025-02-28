@@ -30,8 +30,6 @@ public class SecurityFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws IOException, ServletException {
 
-    SecurityContextHolder.getContext().setAuthentication(null);
-
     String token = request.getHeader("Authorization");
     if (token != null && request.getRequestURI().startsWith("/company")) {
       token = token.replace("Bearer ", "");

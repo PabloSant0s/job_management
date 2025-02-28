@@ -27,7 +27,7 @@ public class JwtCandidateProvider implements JwtProvider {
     String token = JWT.create()
         .withIssuer("javagas")
         .withExpiresAt(expiresIn)
-        .withClaim("roles", Arrays.asList("candidate"))
+        .withClaim("roles", Arrays.asList("CANDIDATE"))
         .withSubject(sub).sign(algorithm);
 
     return AuthResponseDTO.builder().access_token(token).expires_in(expiresIn.toEpochMilli()).build();
