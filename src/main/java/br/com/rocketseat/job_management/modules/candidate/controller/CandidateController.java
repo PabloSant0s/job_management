@@ -24,6 +24,13 @@ import br.com.rocketseat.job_management.modules.candidate.useCase.CreateCandidat
 import br.com.rocketseat.job_management.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.ProfileCandidateUseCase;
 import br.com.rocketseat.job_management.modules.company.entities.JobEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -78,6 +85,13 @@ public class CandidateController {
 
   @PreAuthorize("hasRole('CANDIDATE')")
   @GetMapping("/job/filter")
+  @Tag(name = "Candidato", description = "Informações do candidato")
+  @Operation(summary = "Listagem de vagas disponível para o candidato", description = "Essa função é responsável por listar todas as vagas disponíveis, baseada no filtro")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", content = {
+      @Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
+    })
+  })
   public List<JobEntity> getMethodName(@RequestParam(required = false, defaultValue = "") String description) {
       return listAllJobsByFilterUseCase.execute(description);
   }
