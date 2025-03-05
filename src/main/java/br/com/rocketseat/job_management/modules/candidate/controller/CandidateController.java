@@ -19,6 +19,7 @@ import br.com.rocketseat.job_management.exceptions.CandidateNotFoundException;
 import br.com.rocketseat.job_management.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
 import br.com.rocketseat.job_management.modules.candidate.dto.AuthCandidateDTO;
+import br.com.rocketseat.job_management.modules.candidate.dto.ProfileCandidateDTO;
 import br.com.rocketseat.job_management.modules.candidate.useCase.AuthenticateCandidateUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.CreateCandidateUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.ListAllJobsByFilterUseCase;
@@ -65,6 +66,15 @@ public class CandidateController {
 
   @PreAuthorize("hasRole('CANDIDATE')")
   @GetMapping
+  @Tag(name = "Candidato", description = "Informações do Candidato")
+  @Operation(summary = "Perfil do candidato", description = "Essa função é responsável por buscar as informações do perfil do candidato")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", content = {
+      @Content(schema = @Schema(implementation = ProfileCandidateDTO.class))
+    }),
+    @ApiResponse(responseCode = "400", description = "User not found")
+  })
+  @SecurityRequirement(name = "jwt_auth")
   public ResponseEntity<Object> getProfile(HttpServletRequest request) {
     try {
         UUID candidateId = UUID.fromString(request.getAttribute("candidate_id").toString());
