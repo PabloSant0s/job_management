@@ -37,11 +37,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato", description = "Informações do candidato")
 public class CandidateController {
   
   @Autowired
@@ -56,6 +54,13 @@ public class CandidateController {
   @Autowired
   private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase; 
   @PostMapping
+  @Operation(summary = "Cadastro do candidato", description = "Essa função é responsável por cadastrar um novo candidato")
+  @ApiResponses({
+    @ApiResponse(responseCode = "201", content = {
+      @Content(schema = @Schema(implementation = ProfileCandidateDTO.class))
+    }),
+    @ApiResponse(responseCode = "400", description = "Usuário já Existe")
+  })
   public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidate) {
       try {
         return new ResponseEntity<>(this.createCandidateUseCase.execute(candidate),HttpStatus.CREATED);
@@ -66,7 +71,6 @@ public class CandidateController {
 
   @PreAuthorize("hasRole('CANDIDATE')")
   @GetMapping
-  @Tag(name = "Candidato", description = "Informações do Candidato")
   @Operation(summary = "Perfil do candidato", description = "Essa função é responsável por buscar as informações do perfil do candidato")
   @ApiResponses({
     @ApiResponse(responseCode = "200", content = {
@@ -85,6 +89,13 @@ public class CandidateController {
   }
 
   @PostMapping("/auth")
+  @Operation(summary = "Autenticar Candidato", description = "Essa função é responsável por autenticar o candidato")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", content = {
+      @Content(schema = @Schema(implementation = AuthResponseDTO.class))
+    }),
+    @ApiResponse(responseCode = "401", description = "Username/password incorrect")
+  })
   public ResponseEntity<Object> authCandidate (@RequestBody AuthCandidateDTO authCandidateDTO) {
       try {
         AuthResponseDTO result = authenticateCandidateUseCase.execute(authCandidateDTO);
@@ -96,7 +107,6 @@ public class CandidateController {
 
   @PreAuthorize("hasRole('CANDIDATE')")
   @GetMapping("/job/filter")
-  @Tag(name = "Candidato", description = "Informações do candidato")
   @Operation(summary = "Listagem de vagas disponível para o candidato", description = "Essa função é responsável por listar todas as vagas disponíveis, baseada no filtro")
   @ApiResponses({
     @ApiResponse(responseCode = "200", content = {
