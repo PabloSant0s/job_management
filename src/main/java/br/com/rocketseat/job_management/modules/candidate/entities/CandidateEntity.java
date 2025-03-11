@@ -1,4 +1,4 @@
-package br.com.rocketseat.job_management.modules.candidate;
+package br.com.rocketseat.job_management.modules.candidate.entities;
 
 import java.time.Instant;
 import java.util.UUID;

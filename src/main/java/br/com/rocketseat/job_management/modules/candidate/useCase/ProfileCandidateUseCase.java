@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.rocketseat.job_management.exceptions.CandidateNotFoundException;
-import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
-import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
 import br.com.rocketseat.job_management.modules.candidate.dto.ProfileCandidateDTO;
+import br.com.rocketseat.job_management.modules.candidate.entities.CandidateEntity;
+import br.com.rocketseat.job_management.modules.candidate.repositories.CandidateRepository;
 
 @Service
 public class ProfileCandidateUseCase {

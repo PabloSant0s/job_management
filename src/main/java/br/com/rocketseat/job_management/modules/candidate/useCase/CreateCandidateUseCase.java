@@ -5,9 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.rocketseat.job_management.exceptions.UserFoundException;
-import br.com.rocketseat.job_management.modules.candidate.CandidateEntity;
-import br.com.rocketseat.job_management.modules.candidate.CandidateRepository;
 import br.com.rocketseat.job_management.modules.candidate.dto.ProfileCandidateDTO;
+import br.com.rocketseat.job_management.modules.candidate.entities.CandidateEntity;
+import br.com.rocketseat.job_management.modules.candidate.repositories.CandidateRepository;
 
 @Service
 public class CreateCandidateUseCase {
