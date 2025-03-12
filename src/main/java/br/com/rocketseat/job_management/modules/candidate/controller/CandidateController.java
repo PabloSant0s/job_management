@@ -19,7 +19,9 @@ import br.com.rocketseat.job_management.exceptions.CandidateNotFoundException;
 import br.com.rocketseat.job_management.exceptions.UserFoundException;
 import br.com.rocketseat.job_management.modules.candidate.dto.AuthCandidateDTO;
 import br.com.rocketseat.job_management.modules.candidate.dto.ProfileCandidateDTO;
+import br.com.rocketseat.job_management.modules.candidate.entities.ApplyJobEntity;
 import br.com.rocketseat.job_management.modules.candidate.entities.CandidateEntity;
+import br.com.rocketseat.job_management.modules.candidate.useCase.ApplyJobCandidateUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.AuthenticateCandidateUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.CreateCandidateUseCase;
 import br.com.rocketseat.job_management.modules.candidate.useCase.ListAllJobsByFilterUseCase;
@@ -50,6 +52,9 @@ public class CandidateController {
 
   @Autowired
   private AuthenticateCandidateUseCase authenticateCandidateUseCase;
+
+  @Autowired
+  private ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
   @Autowired
   private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase; 
@@ -117,5 +122,27 @@ public class CandidateController {
   public List<JobEntity> getMethodName(@RequestParam(required = false, defaultValue = "") String description) {
       return listAllJobsByFilterUseCase.execute(description);
   }
+
+  @PreAuthorize("hasRole('CANDIDATE')")
+  @PostMapping("/job/apply")
+  @Operation(summary = "Fazer inscrição em uma Vaga", description = "Essa função é responsável por realizar a inscrição de um candidato em uma vaga")
+  @ApiResponses({
+    @ApiResponse(responseCode = "200", content = {
+      @Content(schema = @Schema(implementation = ApplyJobEntity.class))
+    }),
+  })
+  @SecurityRequirement(name = "jwt_auth")
+  public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idJob) {
+      var idCandidate = request.getAttribute("candidate_id");
+      
+      try {
+        var result = applyJobCandidateUseCase.execute(UUID.fromString(idCandidate.toString()), idJob);
+        return ResponseEntity.ok().body(result);
+      } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      }
+  }
+  
+
   
 }
