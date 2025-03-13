@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import br.com.rocketseat.job_management.modules.company.dto.CreateJobDTO;
 import br.com.rocketseat.job_management.modules.company.entities.CompanyEntity;
 import br.com.rocketseat.job_management.modules.company.repositories.CompanyRepository;
@@ -45,12 +47,12 @@ public class CreateJobControllerTest {
   @Test
   public void should_be_able_to_create_a_new_job() throws Exception {
     var company = CompanyEntity.builder()
-    .name("COMPANY_TEST")
-    .username("COMPANYTEST")
-    .email("COMPANY@TEST.COM")
-    .password("12345678910")
-    .description("COMPANY_DESCRIPTION")
-    .build();
+        .name("COMPANY_TEST")
+        .username("COMPANYTEST")
+        .email("COMPANY@TEST.COM")
+        .password("12345678910")
+        .description("COMPANY_DESCRIPTION")
+        .build();
 
     company = companyRepository.saveAndFlush(company);
 
@@ -66,5 +68,21 @@ public class CreateJobControllerTest {
         .content(TestUtil.objectToJson(createJobDTO))).andExpect(MockMvcResultMatchers.status().isNoContent());
 
     System.out.println(result);
+  }
+
+  @Test
+  public void should_not_be_able_to_create_bob_with_company_not_found() throws JsonProcessingException, Exception {
+    var createJobDTO = CreateJobDTO.builder()
+        .benefits("BENEFITS_TEST")
+        .level("LEVELS_TEST")
+        .description("DESCRIPTION_TEST")
+        .build();
+
+        mvc.perform(MockMvcRequestBuilders.post("/company/job")
+        .contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", TestUtil.generateToken(UUID.randomUUID(), "JAVA_@123#"))
+        .content(TestUtil.objectToJson(createJobDTO))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+
   }
 }

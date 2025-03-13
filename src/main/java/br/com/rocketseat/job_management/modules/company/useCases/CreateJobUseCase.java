@@ -13,16 +13,11 @@ public class CreateJobUseCase {
   @Autowired
   private JobRepository jobRepository;
 
-  @Autowired 
+  @Autowired
   private CompanyRepository companyRepository;
 
   public void execute(JobEntity job) {
-    boolean existCompany = this.companyRepository.findById(job.getCompanyId()).isPresent();
-
-    if(!existCompany){
-      throw new CompanyNotFoundException();
-    }
-
+    this.companyRepository.findById(job.getCompanyId()).orElseThrow(() -> new CompanyNotFoundException());
     this.jobRepository.save(job);
   }
 }
